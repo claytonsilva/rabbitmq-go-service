@@ -1,0 +1,23 @@
+run:
+  timeout: 5m
+
+linters:
+  enable:
+    - govet
+    - revive
+    - goimports
+    - unused
+    - goconst
+    - errcheck
+  enable-all: false
+  disable-all: true
+  fast: false
+
+issues:
+  exclude-use-default: false
+
+misspell:
+  locale: US
+
+lll:
+  line-length: 100

@@ -1,0 +1,6 @@
+# Env variables
+.env
+# Localstack
+.localstack
+
+dist/
