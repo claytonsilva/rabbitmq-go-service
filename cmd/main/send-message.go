@@ -3,12 +3,23 @@ package main
 import (
 	"fmt"
 	"log"
+	"math/rand"
 	"time"
 
 	"github.com/streadway/amqp"
 )
 
-func send(ampqQueryString string, queueName string, interval int) {
+const letterBytes = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
+func randStringBytes(n int) string {
+	b := make([]byte, n)
+	for i := range b {
+		b[i] = letterBytes[rand.Intn(len(letterBytes))]
+	}
+	return string(b)
+}
+
+func send(ampqQueryString string, queueName string, interval int, payloadSize int) {
 	conn, err := amqp.Dial(ampqQueryString)
 	failOnError(err, "Failed to connect to RabbitMQ", true)
 	defer closeConn(conn)
@@ -30,7 +41,7 @@ func send(ampqQueryString string, queueName string, interval int) {
 	i := 1
 
 	for {
-		body := fmt.Sprintf("Message %d sent", i)
+		body := fmt.Sprintf("Message %d sent %s", i, randStringBytes(payloadSize))
 		err = ch.Publish(
 			"",     // exchange
 			q.Name, // routing key
